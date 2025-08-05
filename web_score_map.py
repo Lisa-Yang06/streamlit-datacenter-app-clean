@@ -125,17 +125,25 @@ st.title("🗺️ Interactive County-Level Environmental Friendliness Map")
 # 读取数据函数
 @st.cache_data
 def load_data():
-    counties = gpd.read_file("/Users/yuxuanyang/Library/CloudStorage/OneDrive-Emory/AI.X/us_map/tl_2024_us_county/tl_2024_us_county.shp")
+    # 下载并缓存 shapefile zip 文件
+    url = "https://www2.census.gov/geo/tiger/TIGER2024/COUNTY/tl_2024_us_county.zip"
+    r = requests.get(url)
+    r.raise_for_status()
+    
+    with tempfile.TemporaryDirectory() as tmpdir:
+        zip_path = f"{tmpdir}/tl_2024_us_county.zip"
+        with open(zip_path, "wb") as f:
+            f.write(r.content)
+
+        with zipfile.ZipFile(zip_path, "r") as zip_ref:
+            zip_ref.extractall(tmpdir)
+
+        shapefile_path = f"{tmpdir}/tl_2024_us_county.shp"
+        counties = gpd.read_file(shapefile_path)
+    
     counties["GEOID"] = counties["GEOID"].astype(str).str.zfill(5)
-    counties["STATE"] = counties["STATEFP"].map(fips_to_state_abbr)
-
-    score_df = pd.read_csv("/Users/yuxuanyang/Library/CloudStorage/OneDrive-Emory/AI.X/env_RESULTS/data/MERGED.csv")
-    score_df["GEOID"] = score_df["GEOID"].astype(str).str.zfill(5)
-
-    merged = counties.merge(score_df, on="GEOID", how="left")
-    merged["geometry"] = merged["geometry"].simplify(tolerance=0.01, preserve_topology=True)
+    ...
     return merged
-
 # 加载合并数据
 map_df = load_data()
 
