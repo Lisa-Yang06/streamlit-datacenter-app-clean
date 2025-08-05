@@ -6,6 +6,17 @@ from streamlit_folium import st_folium
 from folium.features import GeoJsonTooltip
 import branca.colormap as cm
 import sys
+import streamlit as st
+import pandas as pd
+import geopandas as gpd
+import folium
+import requests  # ✅ 加上这行！
+import zipfile
+import tempfile
+from streamlit_folium import st_folium
+from folium.features import GeoJsonTooltip
+import branca.colormap as cm
+
 
 state_name_to_fips = {
     "Alabama": "01",
