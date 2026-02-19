@@ -45,6 +45,7 @@ Built a Streamlit web application with dynamic geospatial visualization (Folium)
 - Adjust weights between profitability and environmental suitability
 - View real-time county-level composite scores
 - Explore trade-offs across the U.S. map
+- https://datacenter-site-suitability.streamlit.app/
 
 ## Impact
 
